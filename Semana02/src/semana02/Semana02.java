@@ -1,15 +1,60 @@
 package semana02;
 
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.io.File;
 import java.util.Scanner;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import views.PomodoroAdvanced;
 
 
 public class Semana02 {
 
+    private static JFrame view;
 
     public static void main(String[] args) {
-        new PomodoroAdvanced().setVisible(true);
+        view = new PomodoroAdvanced();
+        view.setVisible(true);
+        createIconTray();
+    }
+    
+    public static void createIconTray(){
+        if(!SystemTray.isSupported()){
+            System.out.println("Não tem suporte tray!");
+            return;
+        }
+        
+        String path = System.getProperty("user.dir") + File.separator + "src" + File.separator + "assets" + File.separator + "tray.png";
+        Image icon = new ImageIcon(path).getImage();
+        
+        PopupMenu menu = new PopupMenu();
+        MenuItem fechar = new MenuItem("FECHAR");
+        MenuItem abrir = new MenuItem("ABRIR");
+        menu.add(fechar);
+        menu.add(abrir);
+        
+        abrir.addActionListener((ActionEvent) -> {
+            view.setVisible(true);
+        });
+        fechar.addActionListener((ActionEvent) -> {
+            System.exit(0);
+        });
+        
+        
+        TrayIcon tray = new TrayIcon(icon, "Pomodoro", menu);
+        
+        SystemTray bandeja = SystemTray.getSystemTray();
+        
+        try {
+            bandeja.add(tray);
+        }catch(Exception e){
+            System.out.println("Não foi possivel Add Tray");
+        }
     }
     
     public static void metodoJoption(){

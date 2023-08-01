@@ -4,8 +4,10 @@
  */
 package views;
 
+import enums.Status;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
@@ -16,8 +18,10 @@ import javax.swing.Timer;
  */
 public class PomodoroAdvanced extends javax.swing.JFrame {
 
+
     public PomodoroAdvanced() {
         initComponents();
+        time = this.createTimer();
     }
     
     private Timer time;
@@ -30,8 +34,13 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
     private int fastBreakTime = 5;
     private int longBreakTime = 15;
     private int rounds = 4;
+    private int countRound = 0;
     
     private int tempoRestante = 25 * 60;
+    private boolean isStopped = true;
+    
+    private Status statusAtual = Status.PAUSED;
+    private Status statusAnterior = null;
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -60,7 +69,6 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
         aplyBtn = new javax.swing.JButton();
         resetBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
 
         main.setLayout(new java.awt.CardLayout());
@@ -71,6 +79,11 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
 
         playAndPauseBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/play.png"))); // NOI18N
         playAndPauseBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        playAndPauseBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                playAndPauseBtnMouseClicked(evt);
+            }
+        });
 
         settingsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/engrenagem.png"))); // NOI18N
         settingsBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -98,14 +111,14 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
                         .addGap(154, 154, 154))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, timerLayout.createSequentialGroup()
                         .addComponent(settingsBtn)
-                        .addGap(55, 55, 55))))
+                        .addGap(49, 49, 49))))
         );
         timerLayout.setVerticalGroup(
             timerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(timerLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(35, 35, 35)
                 .addComponent(settingsBtn)
-                .addGap(44, 44, 44)
+                .addGap(43, 43, 43)
                 .addComponent(timerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(playAndPauseBtn)
@@ -350,6 +363,27 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
         this.roundSlider.setValue(this.ROUNDS);
         //comecar a rodar o tempo e trocar icone no botao, 
     }//GEN-LAST:event_resetBtnActionPerformed
+
+    private void playAndPauseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playAndPauseBtnMouseClicked
+        if(isStopped){
+            this.time.start();
+            this.playAndPauseBtn.setIcon(new ImageIcon(getClass().getResource("/assets/pause.png")));
+            //isStopped = false;
+            if(this.statusAnterior == null){
+                statusAtual = Status.FOCUS_TIME;
+                statusAnterior = Status.PAUSED;
+            }else {
+                statusAtual = statusAnterior;
+                statusAnterior = Status.PAUSED;
+            }
+        }else{
+            this.time.stop();
+            this.playAndPauseBtn.setIcon(new ImageIcon(getClass().getResource("/assets/play.png")));
+            //isStopped = true;
+        }
+        this.isStopped = !this.isStopped;
+        
+    }//GEN-LAST:event_playAndPauseBtnMouseClicked
  
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -396,5 +430,31 @@ public class PomodoroAdvanced extends javax.swing.JFrame {
         int minutos = this.tempoRestante / 60;
         int segundos = this.tempoRestante % 60;
         this.timerLabel.setText(String.format("%02d:%02d", minutos, segundos));
+        if(this.tempoRestante <= 0 ){
+            this.changeStatus();
+        }
+    }
+    private void changeStatus (){
+        if(this.statusAtual == Status.FOCUS_TIME && this.rounds == this.countRound){
+            this.statusAtual = Status.BREAK_LONG;
+            this.statusAnterior = Status.FOCUS_TIME;
+            this.countRound = 0;
+            this.tempoRestante = this.longBreakTime * 60;
+        }else if(this.statusAtual == Status.FOCUS_TIME && this.rounds != this.countRound){
+            this.statusAtual = Status.BREAK_FAST;
+            this.statusAnterior = Status.FOCUS_TIME;
+            this.countRound--;
+            this.tempoRestante = this.fastBreakTime * 60;
+        }else if(this.statusAtual == Status.BREAK_FAST){
+            this.statusAtual = Status.FOCUS_TIME;
+            this.statusAnterior = Status.BREAK_FAST;
+            this.countRound--;
+            this.tempoRestante = this.focusTime * 60;
+        }else if(this.statusAtual == Status.BREAK_LONG){
+            this.statusAtual = Status.FOCUS_TIME;
+            this.statusAnterior = Status.BREAK_LONG;
+            this.countRound--;
+            this.tempoRestante = this.focusTime * 60;
+        }
     }
 }
