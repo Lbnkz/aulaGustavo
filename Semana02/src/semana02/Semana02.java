@@ -20,7 +20,6 @@ public class Semana02 {
     public static void main(String[] args) {
         view = new PomodoroAdvanced();
         view.setVisible(true);
-        createIconTray();
     }
     
     public static void createIconTray(){
