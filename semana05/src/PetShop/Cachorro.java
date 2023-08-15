@@ -1,8 +1,8 @@
-package semana05;
+package PetShop;
 
 public class Cachorro {
 
-    public Cachorro(String nome, String raca, int idade, String porte, Pessoa dono) {
+    public Cachorro(String nome, String raca, int idade, String porte, Dono dono) {
         this.nome = nome;
         this.raca = raca;
         this.idade = idade;
@@ -38,10 +38,10 @@ public class Cachorro {
         this.porte = porte;
     }
 
-    public Pessoa getDono() {
+    public Dono getDono() {
         return this.dono;
     }
-    public void setDono(Pessoa dono) {
+    public void setDono(Dono dono) {
         this.dono = dono;
     }
 
@@ -51,6 +51,6 @@ public class Cachorro {
     private String raca;
     private int idade;
     private String porte;
-    private Pessoa dono;
+    private Dono dono;
 
 }
