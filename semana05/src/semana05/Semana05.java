@@ -1,30 +1,26 @@
 package semana05;
 
+import banco.Conta;
+import banco.Pessoa;
 import java.util.ArrayList;
-
 
 public class Semana05 {
 
-
     public static void main(String[] args) {
-        
-        ArrayList<Cachorro> listaDog = new ArrayList<>();
-        
-        
-        
-        Pessoa donoUm = new Pessoa("Lucas", "1234-5678", "Rua oafnawdd, n° 123");
-        
-        
-        
-        
-        
-        listaDog.add(new Cachorro("Python", "Labrador", 4, "Grande", donoUm));
-        listaDog.add(new Cachorro("Java", "Husk", 6, "Grande", donoUm));
-       
+        ArrayList<Conta> banco = new ArrayList<>();
 
-        
-        for(Cachorro dog : listaDog){
-            System.out.println(dog.getNome() + " - "+ dog.getDono().getNome());
+        Pessoa p1 = new Pessoa("Lucas", "099.123.121-98", "6.742.275", "991068743", "Rua tal");
+        Pessoa p2 = new Pessoa("Joao", "798.456.234-88", "6.787.241", "991068743", "Rua tal");
+        Pessoa p3 = new Pessoa("kaue", "023.987.089-18", "6.235.234", "991068743", "Rua tal");
+
+        banco.add(new Conta(p1));
+        banco.add(new Conta(p2));
+        banco.add(new Conta(p3));
+
+        for (Conta conta : banco) {
+            conta.depositar(100.0);
+            System.out.println(" ");
         }
-    }    
+        
+    }
 }

@@ -1,9 +1,9 @@
-package semana05;
+package PetShop;
 
 
-public class Pessoa {
+public class Dono {
 
-    public Pessoa(String nome, String telDono, String endereco) {
+    public Dono(String nome, String telDono, String endereco) {
         this.nome = nome;
         this.telDono = telDono;
         this.endereco = endereco;
@@ -13,6 +13,7 @@ public class Pessoa {
     private String nome;
     private String telDono;
     private String endereco;
+    
 
     public String getNome() {
         return this.nome;
