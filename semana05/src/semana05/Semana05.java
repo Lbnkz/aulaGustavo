@@ -18,10 +18,8 @@ public class Semana05 {
         banco.add(new Conta(p3));
 
         for (Conta conta : banco) {
-            
             conta.depositar(100.0);
             System.out.println(" ");
-            conta.sacar(50.0);
         }
         
     }
