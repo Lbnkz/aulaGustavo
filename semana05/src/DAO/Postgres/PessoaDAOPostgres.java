@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DAO;
+package DAO.Postgres;
 
 /**
  *
- * @author Professor
+ * @author lucas_baixo-nunes
  */
-public class ContaDAO {
+public class PessoaDAOPostgres {
     
 }
